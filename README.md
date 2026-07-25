@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nishant OS — AI Engineer Portfolio
 
-## Getting Started
+An award-grade, "the website *is* the project" portfolio. Built to feel like a
+premium AI product (OpenAI / Anthropic / Linear / Vercel), not a template.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) · **React 19** · **TypeScript**
+- **Tailwind CSS v4** (CSS-first tokens in `globals.css`)
+- **Motion** (Framer Motion) for animation · **Lenis** for smooth scroll
+- **Canvas 2D** neural-network background & knowledge graph (no heavy 3D)
+- **lucide-react** icons (+ custom brand marks)
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
+npm run start    # serve the build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Feature map
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Feature | Where |
+| --- | --- |
+| AI boot sequence | `components/layout/BootLoader.tsx` |
+| Hero + neural bg + mouse light | `components/sections/Hero.tsx`, `ui/NeuralBackground.tsx` |
+| **AI recruiter assistant** | `components/assistant/Assistant.tsx` + `app/api/chat/route.ts` |
+| Retrieval engine (RAG-lite) | `lib/retrieval.ts` |
+| Terminal about | `components/sections/About.tsx` |
+| Knowledge graph | `components/sections/Skills.tsx` |
+| Project showcases | `components/sections/Projects.tsx` |
+| Project case studies | `app/work/[slug]/page.tsx` |
+| Animated architecture diagrams | `components/ui/ArchitectureDiagram.tsx` |
+| Research / Publications / Achievements / Experience / GitHub | `components/sections/*` |
+| Connect Protocol (contact) | `components/sections/Contact.tsx` |
+| Command palette (⌘K) + global search | `components/layout/CommandPalette.tsx` |
+| Recruiter mode | `components/providers/AppState.tsx` + `data-recruiter-hide` in `app/page.tsx` |
+| Custom cursor / magnetic buttons / live clock | `components/ui/*`, `components/layout/LiveClock.tsx` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Make it yours
 
-## Learn More
+**1. Content.** Everything lives in one file: [`src/lib/data.ts`](src/lib/data.ts).
+Edit `profile`, `projects`, `research`, `publications`, `experience`,
+`achievements`, `skills`, and `github`. The whole site *and* the AI assistant
+read from here.
 
-To learn more about Next.js, take a look at the following resources:
+**2. Résumé.** Replace `public/resume.pdf` with your real résumé.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**3. Social links.** In `data.ts` → `profile.socials`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**4. Connect the assistant to a real LLM.** The endpoint
+`app/api/chat/route.ts` already retrieves grounded context via
+`retrieve(query)`. Uncomment the LLM hook and pass the context + question to
+your model (e.g. Claude via the Anthropic SDK). The client already expects the
+`{ answer, citations, suggestions }` shape, so no UI changes are needed.
 
-## Deploy on Vercel
+**5. Contact form.** `Contact.tsx` simulates a send. Wire the `submit` handler
+to an API route / form service to make it live.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Keyboard shortcuts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `⌘K` / `Ctrl K` — command palette
+- `⌘J` / `Ctrl J` — toggle AI assistant
+- `Esc` — close overlays
+
+## Accessibility & performance
+
+- Respects `prefers-reduced-motion` everywhere (boot, cursor, canvas, reveals).
+- Custom cursor only hides the native cursor on fine-pointer, motion-OK devices.
+- Semantic landmarks, focus-visible rings, keyboard-navigable palette & assistant.
+- Static generation for all pages; canvas pauses when offscreen.
