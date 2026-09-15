@@ -24,7 +24,7 @@ const SITE = {
   title: "Nishant Shah — AI Engineer",
   description:
     "AI, Machine Learning & Computer Vision engineer building production AI systems that think, reason, and solve real problems. Multi-agent frameworks, LLMs, and healthcare AI.",
-  url: "https://nishantshah.ai",
+  url: "https://nishantshah05.com.np",
 };
 
 export const metadata: Metadata = {
