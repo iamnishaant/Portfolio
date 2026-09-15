@@ -79,7 +79,7 @@ function buildCorpus(): Passage[] {
       title: pub.title,
       section: "Publications",
       href: "#publications",
-      text: `${pub.title}. ${pub.type} at ${pub.venue}, ${pub.year}. ${pub.abstract}`,
+      text: `${pub.title}. ${pub.type} — ${pub.venue}, ${pub.year}. ${pub.abstract ?? ""}`,
     });
   }
 
@@ -263,7 +263,7 @@ export function answer(query: string): AssistantAnswer {
   if (q.includes("hire") || q.includes("why should")) {
     return {
       answer:
-        "Three reasons. 1) He builds complete, agentic AI systems end-to-end — LedgerMind, an agentic financial OS (LangGraph + FastAPI + Supabase, 108 live tests, deterministic numbers with the LLM only classifying/explaining); NeuroBank, a four-agent banking assistant; and ClarityStack, a local-first knowledge platform spanning a FastAPI backend, a Next.js web app, and a native Android client. 2) He has research depth — a peer-reviewed paper, DRISHTI, at ICTIS 2026 (Bangkok), plus 90%+ accuracy models in medical imaging and domain adaptation. 3) He owns the whole stack — models, FastAPI services, databases, and front-end — and cares about accuracy, explainability, and shipping. He's a CSE (AI) student at Amrita with real, measured results.",
+        "Three reasons. 1) He builds complete, agentic AI systems end-to-end — LedgerMind, an agentic financial OS (LangGraph + FastAPI + Supabase, 108 live tests, deterministic numbers with the LLM only classifying/explaining); NeuroBank, a four-agent banking assistant; and ClarityStack, a local-first knowledge platform spanning a FastAPI backend, a Next.js web app, and a native Android client. 2) He has research depth — a published patent application on diabetic-retinopathy severity grading, a peer-reviewed paper (DRISHTI, ICTIS 2026, Bangkok), 90%+ accuracy medical-imaging models, and a verification-guided RAG pipeline whose 0.5B model beats a 70B baseline on physics correctness by 135%. 3) He owns the whole stack — models, FastAPI services, databases, and front-end — and cares about accuracy, explainability, and shipping. He's a CSE (AI) student at Amrita with real, measured results.",
       citations: cite(retrieve("LedgerMind NeuroBank ClarityStack agentic", 3)),
       suggestions: ["Tell me about LedgerMind", "What research has he done?", "Show me his skills"],
     };
@@ -302,12 +302,24 @@ export function answer(query: string): AssistantAnswer {
     };
   }
 
+  // Patent
+  if (q.includes("patent")) {
+    const patent = publications.find((p) => p.type.toLowerCase().includes("patent"));
+    if (patent) {
+      return {
+        answer: `Yes. He has a published Indian patent application, "${patent.title}" (${patent.year}) — ${patent.venue}.`,
+        citations: [{ title: patent.title, section: "Publications", href: "#publications" }],
+        suggestions: ["What research has he done?", "Show me his healthcare projects", "Why should I hire him?"],
+      };
+    }
+  }
+
   // Research
   if (q.includes("research") || q.includes("publication") || q.includes("paper")) {
     return {
       answer: `His research spans ${research
         .map((r) => r.title)
-        .join(", ")} — anchored by a peer-reviewed paper, DRISHTI (ICTIS 2026, Bangkok), on multimodal edge-AI assistive navigation for the visually impaired.`,
+        .join(", ")} — anchored by a peer-reviewed paper, DRISHTI (ICTIS 2026, Bangkok), on multimodal edge-AI assistive navigation for the visually impaired, and a published Indian patent application (No. 202641091021) on radiomics-guided diabetic-retinopathy severity grading.`,
       citations: cite(retrieve("research publication paper", 3)),
       suggestions: ["Show me his publications", "Tell me about Domain Adaptation", "Why should I hire him?"],
     };

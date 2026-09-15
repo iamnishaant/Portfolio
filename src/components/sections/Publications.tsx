@@ -14,8 +14,8 @@ export function Publications() {
         <SectionHeading
           index="05"
           eyebrow="Publications"
-          title="Peer-reviewed, and reproducible."
-          description="Research that shipped with code and results others can verify."
+          title="Papers, and a patent."
+          description="Peer-reviewed research, and a published patent application in medical imaging."
         />
 
         <div className="mt-14 divide-y divide-line border-y border-line">
@@ -53,9 +53,11 @@ function PubRow({
             {pub.title}
           </button>
           <p className="text-sm text-ink-dim">
-            <span className="italic">{pub.venue}</span> · {pub.authors}
+            <span className="italic">{pub.venue}</span>
+            {pub.authors && <> · {pub.authors}</>}
           </p>
 
+          {pub.abstract && (
           <motion.div
             initial={false}
             animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
@@ -76,15 +78,20 @@ function PubRow({
               )}
             </div>
           </motion.div>
+          )}
 
           <div className="mt-2 flex flex-wrap items-center gap-2">
-            <button
-              onClick={() => setOpen((v) => !v)}
-              className="text-xs font-medium text-blue transition-colors hover:text-cyan"
-            >
-              {open ? "Hide abstract" : "Read abstract"}
-            </button>
-            <span className="text-ink-faint">·</span>
+            {pub.abstract && (
+              <>
+                <button
+                  onClick={() => setOpen((v) => !v)}
+                  className="text-xs font-medium text-blue transition-colors hover:text-cyan"
+                >
+                  {open ? "Hide abstract" : "Read abstract"}
+                </button>
+                <span className="text-ink-faint">·</span>
+              </>
+            )}
             {pub.links.pdf && (
               <PubLink href={pub.links.pdf} icon={<FileText className="h-3.5 w-3.5" />}>
                 PDF

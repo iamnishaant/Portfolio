@@ -17,7 +17,7 @@ export const profile = {
   ],
   tagline: "Building AI systems that think, reason, and solve real problems.",
   summary:
-    "Computer Science student specializing in AI with hands-on experience in Machine Learning, Deep Learning, Computer Vision, and data-driven analytics. I've developed and deployed scalable AI models achieving 90%+ classification accuracy across healthcare, domain adaptation, and assistive-intelligence applications — skilled in Python, TensorFlow, PyTorch, FastAPI, and modern full-stack architectures, and focused on translating complex data into production-ready intelligent systems.",
+    "AI/CS undergraduate specializing in Machine Learning, Computer Vision, and AI Systems, with hands-on experience designing multi-agent architectures, retrieval pipelines, and edge-deployed AI solutions. Strong foundation in computer vision and neural-network fundamentals, with project experience spanning healthcare, assistive intelligence, and conversational AI systems. Published patent applicant and conference presenter, focused on building systems from first principles rather than off-the-shelf pipelines.",
   location: "Amritapuri, India",
   availability: "Open to AI / ML engineering roles & internships",
   email: "nishant108ns@gmail.com",
@@ -41,7 +41,7 @@ export const profile = {
 /*  Stats — animated counters                                          */
 /* ------------------------------------------------------------------ */
 export const stats = [
-  { label: "AI & ML projects", value: 8, suffix: "" },
+  { label: "AI & ML projects", value: 10, suffix: "" },
   { label: "Best model precision", value: 98, suffix: "%" },
   { label: "Peer-reviewed paper", value: 1, suffix: "" },
   { label: "Certifications", value: 5, suffix: "" },
@@ -85,9 +85,9 @@ export const skills: SkillNode[] = [
   { id: "python", label: "Python", group: "core", weight: 3, blurb: "My primary language across ML, backend, and research." },
   { id: "dl", label: "Deep Learning", group: "ml", weight: 3, projects: ["diabetic-retinopathy", "domain-adaptation", "dristi"] },
   { id: "cv", label: "Computer Vision", group: "cv", weight: 3, projects: ["diabetic-retinopathy", "dristi", "domain-adaptation"] },
-  { id: "llm", label: "LLMs", group: "llm", weight: 3, projects: ["ledgermind", "esgenuine", "neurobank", "claritystack"] },
+  { id: "llm", label: "LLMs", group: "llm", weight: 3, projects: ["ledgermind", "esgenuine", "vg-rag", "neurobank", "claritystack"] },
   { id: "agents", label: "AI Agents", group: "llm", weight: 3, projects: ["ledgermind", "neurobank"], blurb: "Agentic AI — planners, reflection, execution, and durable human-in-the-loop workflows." },
-  { id: "rag", label: "RAG", group: "llm", weight: 2, projects: ["claritystack", "neurobank", "ledgermind"] },
+  { id: "rag", label: "RAG", group: "llm", weight: 2, projects: ["vg-rag", "claritystack", "neurobank", "ledgermind"] },
   { id: "genai", label: "Generative AI", group: "llm", weight: 2, projects: ["neurobank", "claritystack"] },
   { id: "langgraph", label: "LangGraph", group: "llm", weight: 2, projects: ["ledgermind", "neurobank"] },
   { id: "pytorch", label: "PyTorch", group: "ml", weight: 3, projects: ["diabetic-retinopathy", "domain-adaptation", "dristi"] },
@@ -102,6 +102,7 @@ export const skills: SkillNode[] = [
   { id: "aws", label: "AWS", group: "infra", weight: 2 },
   { id: "raspberrypi", label: "Raspberry Pi / Edge", group: "infra", weight: 2, projects: ["dristi"] },
   { id: "postgres", label: "PostgreSQL", group: "data", weight: 2, projects: ["ledgermind", "esgenuine", "claritystack"] },
+  { id: "spark", label: "Apache Spark", group: "data", weight: 2, projects: ["maritime-risk"], blurb: "PySpark pipelines that turn large-scale AIS vessel data into Parquet for analytics." },
   { id: "bioinformatics", label: "Genome Assembly", group: "data", weight: 2, projects: ["genome-assembly"], blurb: "de Bruijn assembly & viral genomics with BioPython / PySam." },
 ];
 
@@ -118,6 +119,7 @@ export const skillLinks: [string, string][] = [
   ["docker", "kubernetes"], ["docker", "aws"], ["kubernetes", "aws"],
   ["raspberrypi", "cv"], ["raspberrypi", "python"],
   ["bioinformatics", "python"], ["bioinformatics", "sklearn"],
+  ["spark", "python"], ["spark", "postgres"],
 ];
 
 /* ------------------------------------------------------------------ */
@@ -262,6 +264,106 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    slug: "maritime-risk",
+    name: "Maritime Risk Intelligence",
+    category: "Big Data · Graph Analytics",
+    year: "2026",
+    period: "Feb 2026 – May 2026",
+    tagline: "Early warning for port disruptions — from raw AIS vessel data to a live risk dashboard.",
+    status: "Research",
+    accent: "#38bdf8",
+    summary:
+      "A maritime risk-intelligence system that turns large-scale AIS vessel data into early warnings of port disruption. A Spark pipeline ingests raw vessel records into structured Parquet datasets, a spatio-temporal fusion step combines vessel movement, port activity, and weather, and graph-based risk propagation estimates how a disruption at one port can cascade across the network — surfaced on a streaming risk-monitoring dashboard.",
+    problem:
+      "Port disruptions ripple through global shipping, but the early signals are buried in huge, noisy AIS vessel feeds — and a problem at one port rarely stays local.",
+    solution:
+      "PySpark ingests AIS records into Parquet; vessel movement, port activity, and weather are fused spatio-temporally to flag abnormal port behaviour; NetworkX models the interconnected ports to propagate risk; and a Streamlit dashboard streams anomaly scores with EWMA smoothing, tracking MTTD and Risk Delta to measure how early disruptions are caught.",
+    challenges: [
+      "Processing large-scale AIS vessel data into analysis-ready Parquet datasets.",
+      "Fusing vessel, port, and weather signals across space and time.",
+      "Modelling how a disruption at one port cascades across the network.",
+    ],
+    metrics: [
+      { label: "Pipeline", value: "Spark", hint: "AIS → Parquet" },
+      { label: "Signals fused", value: "3", hint: "vessels · ports · weather" },
+      { label: "Risk model", value: "Graph", hint: "NetworkX propagation" },
+      { label: "Detection", value: "EWMA", hint: "MTTD · Risk Delta" },
+    ],
+    stack: ["Python", "PySpark", "Parquet", "pandas", "NetworkX", "Streamlit", "Matplotlib"],
+    architecture: {
+      nodes: [
+        { id: "ais", label: "AIS Vessel Data", sub: "large-scale", col: 0 },
+        { id: "weather", label: "Weather Data", col: 0 },
+        { id: "spark", label: "Spark Ingestion", sub: "→ Parquet", col: 1 },
+        { id: "fusion", label: "Feature Fusion", sub: "spatio-temporal", col: 2 },
+        { id: "graph", label: "Risk Graph", sub: "NetworkX propagation", col: 3 },
+        { id: "score", label: "Anomaly Scoring", sub: "EWMA smoothing", col: 4 },
+        { id: "dash", label: "Risk Dashboard", sub: "Streamlit · MTTD", col: 5 },
+      ],
+      edges: [
+        ["ais", "spark"], ["spark", "fusion"], ["weather", "fusion"],
+        ["fusion", "graph"], ["graph", "score"], ["score", "dash"],
+      ],
+    },
+    highlights: [
+      "PySpark pipeline turning raw AIS vessel records into structured Parquet datasets.",
+      "Spatio-temporal fusion of vessel movement, port activity, and weather to flag abnormal port behaviour.",
+      "Graph-based risk propagation (NetworkX) estimating how disruptions cascade across ports.",
+      "Streaming dashboard with anomaly scoring, EWMA smoothing, and MTTD / Risk Delta metrics.",
+    ],
+    links: { github: "https://github.com/iamnishaant/Maritime-Risk-Intelligence-System" },
+    featured: true,
+  },
+  {
+    slug: "vg-rag",
+    name: "Verification-Guided RAG",
+    category: "Neuro-Symbolic RAG · Semiconductor Physics",
+    year: "2026",
+    period: "Mar 2026 – Jul 2026",
+    tagline: "A 0.5B model that beats a 70B baseline on physics correctness — by verifying its own equations.",
+    status: "Research",
+    accent: "#e879f9",
+    summary:
+      "A neuro-symbolic retrieval-augmented generation pipeline for semiconductor device physics. A fine-tuned 0.5B LLM (LoRA) answers from hybrid retrieval, and a three-stage SymPy verification layer — symbolic parsing, dimensional analysis, numerical plausibility — checks every candidate, boosting physics-correctness by 135% over a 70B baseline (p = 0.002) while running fully offline on an 8GB GPU.",
+    problem:
+      "General-purpose LLMs give fluent but physically wrong answers in technical domains — wrong units, broken equations, implausible numbers — and the usual fix, a larger model judging a smaller one, is expensive and just as unverifiable.",
+    solution:
+      "Hybrid retrieval (FAISS dense + BM25 sparse with a custom physics tokenizer, fused via RRF and cross-encoder reranking) grounds a LoRA-tuned 0.5B model. It generates several candidates, and a physics-score-driven Best-of-N step keeps the one that passes deterministic SymPy checks, replacing LLM-as-a-judge evaluation. Statistical tests and ablation studies validate each stage.",
+    challenges: [
+      "Verifying physics deterministically — symbolic, dimensional, and numerical checks instead of an LLM judge.",
+      "Retrieving the right equations: dense + sparse retrieval with a physics-aware tokenizer.",
+      "Fitting the whole pipeline on an 8GB GPU, fully offline.",
+    ],
+    metrics: [
+      { label: "Physics-correctness", value: "+135%", hint: "vs 70B baseline · p = 0.002" },
+      { label: "Retrieval Hit@3", value: "0.940", hint: "100-question benchmark" },
+      { label: "Less VRAM", value: "116×", hint: "1.2 GB vs 140 GB" },
+      { label: "Lower latency", value: "7.1×", hint: "offline on an 8GB GPU" },
+    ],
+    stack: ["Python", "LoRA", "SymPy", "FAISS", "BM25", "Cross-Encoder", "RAG"],
+    architecture: {
+      nodes: [
+        { id: "q", label: "Physics Question", col: 0 },
+        { id: "ret", label: "Hybrid Retrieval", sub: "FAISS + BM25 · RRF", col: 1 },
+        { id: "rerank", label: "Cross-Encoder", sub: "rerank", col: 2 },
+        { id: "llm", label: "0.5B LLM", sub: "LoRA fine-tuned", col: 3 },
+        { id: "verify", label: "SymPy Verifier", sub: "3-stage check", col: 4 },
+        { id: "best", label: "Best-of-N", sub: "physics score", col: 5 },
+      ],
+      edges: [
+        ["q", "ret"], ["ret", "rerank"], ["rerank", "llm"], ["llm", "verify"], ["verify", "best"],
+      ],
+    },
+    highlights: [
+      "Three-stage SymPy verification: symbolic parsing, dimensional analysis, numerical plausibility.",
+      "Hybrid FAISS + BM25 retrieval with a custom physics tokenizer, RRF fusion, and reranking.",
+      "Deterministic Best-of-N selection replaces LLM-as-a-judge evaluation.",
+      "116× less VRAM and 7.1× lower latency than the 70B baseline — fully offline.",
+    ],
+    links: {},
+    featured: true,
+  },
+  {
     slug: "neurobank",
     name: "NeuroBank",
     category: "AI Banking Assistant · Multi-Agent",
@@ -285,7 +387,7 @@ export const projects: Project[] = [
       { label: "Specialized agents", value: "4", hint: "NLU · Planner · Reflection · Execution" },
       { label: "Core workflows", value: "4", hint: "balance · transfer · history · advice" },
       { label: "Backend", value: "FastAPI", hint: "modular microservices" },
-      { label: "Auth", value: "Secure", hint: "persistent state" },
+      { label: "Query latency", value: "5 ms", hint: "down from 45 ms" },
     ],
     stack: ["Python", "FastAPI", "SQLite", "LLMs", "LangGraph", "Function Calling", "Microservices"],
     architecture: {
@@ -306,6 +408,7 @@ export const projects: Project[] = [
       "Four cooperating agents: NLU, Planner, Reflection, Execution.",
       "LLM function calling bound to real backend banking APIs.",
       "Secure, modular microservice backend with persistent state.",
+      "Normalized, indexed SQLite schema with transactional multi-table JOINs — atomic transfers, query latency cut from 45 ms to 5 ms.",
     ],
     links: { github: "https://github.com/iamnishaant/NeuroBank" },
     featured: true,
@@ -356,6 +459,7 @@ export const projects: Project[] = [
       "Local-first: raw transcripts stay as immutable ground truth.",
       "Distributed FastAPI microservices for SRS, editing, and analytics.",
       "Cross-platform Next.js web app + native Android (Jetpack Compose).",
+      "Relational schemas across 3 services with cross-service foreign keys (transcripts → notes → review cards) and composite indexes for fast daily review-card generation.",
     ],
     links: { github: "https://github.com/iamnishaant/Clarity-Stack--A-Complete-System" },
     featured: true,
@@ -604,6 +708,20 @@ export const research: ResearchStop[] = [
   },
   {
     year: "2026",
+    title: "Data Engineering — Maritime Risk Intelligence",
+    field: "Big Data · Graphs",
+    body: "Took on large, messy real-world data: a Spark pipeline over AIS vessel records, fused with port activity and weather, feeding graph-based risk propagation to estimate how port disruptions cascade.",
+    tags: ["Apache Spark", "NetworkX", "Anomaly Detection"],
+  },
+  {
+    year: "2026",
+    title: "Neuro-Symbolic RAG — Semiconductor Physics",
+    field: "LLMs / Verification",
+    body: "Paired a fine-tuned 0.5B LLM with hybrid retrieval and a SymPy verification layer — 135% higher physics-correctness than a 70B baseline, running fully offline on an 8GB GPU.",
+    tags: ["RAG", "SymPy", "Edge LLMs"],
+  },
+  {
+    year: "2026",
     title: "Agentic AI — LedgerMind & NeuroBank",
     field: "Autonomous Systems",
     body: "Composed LLMs into agentic systems: LedgerMind, an agentic financial OS with durable LangGraph workflows and human-in-the-loop review, and NeuroBank, a four-agent banking assistant with secure function calling into real backend APIs.",
@@ -619,8 +737,8 @@ export interface Publication {
   venue: string;
   year: string;
   type: string;
-  authors: string;
-  abstract: string;
+  authors?: string;
+  abstract?: string;
   doi?: string;
   links: { pdf?: string; slides?: string; code?: string };
 }
@@ -636,6 +754,14 @@ export const publications: Publication[] = [
       "DRISHTI is a Raspberry Pi 5-based wearable edge-AI and IoT system that fuses multimodal sensing — YOLOv8-nano vision, ultrasonic ranging, on-device face recognition, and image captioning — to deliver real-time, fully offline navigation assistance for visually-impaired users. The system reaches 98.42% detection precision at 25 ms latency and delivers guidance through multimodal voice and haptic feedback, eliminating cloud dependence.",
     // doi: "add-your-doi-here",
     links: { code: "https://github.com/iamnishaant/Meenakshi" },
+  },
+  {
+    title:
+      "Radiomics-Guided Cross-Attention Fusion for Severity Grading of Diabetic Retinopathy",
+    venue: "Indian Patent Application No. 202641091021 · Field of invention: Bio Medical Engineering · Status: published, awaiting examination",
+    year: "2026",
+    type: "Patent",
+    links: {},
   },
 ];
 
@@ -687,10 +813,11 @@ export interface Achievement {
   kind: "award" | "scholarship" | "research" | "hackathon";
 }
 export const achievements: Achievement[] = [
-  { title: "First Place — Hackathon", detail: "Winner of the hackathon organized by NitroStack and WeKan", kind: "hackathon" },
+  { title: "First Place — MCP Hackathon", detail: "Winner of the MCP Hackathon organized by NitroStack and WeKan", kind: "hackathon" },
   { title: "Published at ICTIS 2026", detail: "DRISHTI presented at the ICTIS 2026 Conference, Bangkok, Thailand", kind: "research" },
+  { title: "Patent Published", detail: "Radiomics-guided cross-attention fusion for diabetic-retinopathy severity grading — Indian Patent Application No. 202641091021", kind: "research" },
   { title: "Data Fellowship 2025", detail: "Selected for data-driven research and civic-tech innovation", kind: "research" },
-  { title: "Chancellor's Scholarship", detail: "Awarded by Amrita Vishwa Vidyapeetham", kind: "scholarship" },
+  { title: "Chancellor's Scholarship", detail: "Awarded by Amrita Vishwa Vidyapeetham, Amritapuri, Kerala", kind: "scholarship" },
   { title: "5 Professional Certifications", detail: "DataCamp, AWS Academy, Udemy, and IIRS/ISRO", kind: "award" },
 ];
 
