@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { Github } from "@/components/ui/BrandIcons";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -143,6 +143,17 @@ function FeatureBlock({
                 >
                   <Github className="h-4 w-4" />
                   Code
+                </a>
+              )}
+              {p.links.demo && (
+                <a
+                  href={p.links.demo}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm text-ink-dim transition-colors hover:border-line-strong hover:text-ink"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Live demo
                 </a>
               )}
             </div>

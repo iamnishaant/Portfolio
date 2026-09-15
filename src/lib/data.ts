@@ -41,7 +41,7 @@ export const profile = {
 /*  Stats — animated counters                                          */
 /* ------------------------------------------------------------------ */
 export const stats = [
-  { label: "AI & ML projects", value: 7, suffix: "" },
+  { label: "AI & ML projects", value: 8, suffix: "" },
   { label: "Best model precision", value: 98, suffix: "%" },
   { label: "Peer-reviewed paper", value: 1, suffix: "" },
   { label: "Certifications", value: 5, suffix: "" },
@@ -85,7 +85,7 @@ export const skills: SkillNode[] = [
   { id: "python", label: "Python", group: "core", weight: 3, blurb: "My primary language across ML, backend, and research." },
   { id: "dl", label: "Deep Learning", group: "ml", weight: 3, projects: ["diabetic-retinopathy", "domain-adaptation", "dristi"] },
   { id: "cv", label: "Computer Vision", group: "cv", weight: 3, projects: ["diabetic-retinopathy", "dristi", "domain-adaptation"] },
-  { id: "llm", label: "LLMs", group: "llm", weight: 3, projects: ["ledgermind", "neurobank", "claritystack"] },
+  { id: "llm", label: "LLMs", group: "llm", weight: 3, projects: ["ledgermind", "esgenuine", "neurobank", "claritystack"] },
   { id: "agents", label: "AI Agents", group: "llm", weight: 3, projects: ["ledgermind", "neurobank"], blurb: "Agentic AI — planners, reflection, execution, and durable human-in-the-loop workflows." },
   { id: "rag", label: "RAG", group: "llm", weight: 2, projects: ["claritystack", "neurobank", "ledgermind"] },
   { id: "genai", label: "Generative AI", group: "llm", weight: 2, projects: ["neurobank", "claritystack"] },
@@ -94,14 +94,14 @@ export const skills: SkillNode[] = [
   { id: "tensorflow", label: "TensorFlow", group: "ml", weight: 2, projects: ["diabetic-retinopathy"] },
   { id: "sklearn", label: "scikit-learn", group: "ml", weight: 2, projects: ["domain-adaptation", "genome-assembly"] },
   { id: "opencv", label: "OpenCV", group: "cv", weight: 2, projects: ["dristi", "diabetic-retinopathy"] },
-  { id: "fastapi", label: "FastAPI", group: "backend", weight: 3, projects: ["ledgermind", "neurobank", "claritystack"] },
-  { id: "react", label: "React / Next.js", group: "backend", weight: 2, projects: ["ledgermind", "claritystack"] },
-  { id: "typescript", label: "TypeScript", group: "backend", weight: 2, projects: ["ledgermind", "claritystack"] },
-  { id: "docker", label: "Docker", group: "infra", weight: 2 },
+  { id: "fastapi", label: "FastAPI", group: "backend", weight: 3, projects: ["ledgermind", "esgenuine", "neurobank", "claritystack"] },
+  { id: "react", label: "React / Next.js", group: "backend", weight: 2, projects: ["ledgermind", "esgenuine", "claritystack"] },
+  { id: "typescript", label: "TypeScript", group: "backend", weight: 2, projects: ["ledgermind", "esgenuine", "claritystack"] },
+  { id: "docker", label: "Docker", group: "infra", weight: 2, projects: ["esgenuine"] },
   { id: "kubernetes", label: "Kubernetes", group: "infra", weight: 1 },
   { id: "aws", label: "AWS", group: "infra", weight: 2 },
   { id: "raspberrypi", label: "Raspberry Pi / Edge", group: "infra", weight: 2, projects: ["dristi"] },
-  { id: "postgres", label: "PostgreSQL", group: "data", weight: 2, projects: ["ledgermind", "claritystack"] },
+  { id: "postgres", label: "PostgreSQL", group: "data", weight: 2, projects: ["ledgermind", "esgenuine", "claritystack"] },
   { id: "bioinformatics", label: "Genome Assembly", group: "data", weight: 2, projects: ["genome-assembly"], blurb: "de Bruijn assembly & viral genomics with BioPython / PySam." },
 ];
 
@@ -208,6 +208,57 @@ export const projects: Project[] = [
       "Provider-swappable LLM (Anthropic / OpenAI / NVIDIA NIM) + Gmail ingestion.",
     ],
     links: { github: "https://github.com/iamnishaant/LedgerMind" },
+    featured: true,
+  },
+  {
+    slug: "esgenuine",
+    name: "ESGenuine",
+    category: "ESG Document AI · LLM Evaluation",
+    year: "2026",
+    period: "Jun 2026 – Sep 2026",
+    tagline: "Evidence-grounded ESG claim extraction — with a deterministic layer that repairs what the LLM gets wrong.",
+    status: "Production",
+    accent: "#fb923c",
+    summary:
+      "ESGenuine is an evidence-grounded ESG claim extraction and auditing system. It turns a 90-page sustainability report into structured, provenance-carrying claims, then measures how much of that extraction can actually be trusted — with a deterministic post-correction layer that repairs what the language model gets wrong at 0.45 ms per claim and zero inference cost. Every reported number regenerates offline from committed fixtures, with no API key and no network.",
+    problem:
+      "ESG disclosures are unstructured and unverified — the same metric appears as a table cell in one report, a sentence in another, and a footnote in a third. LLM extraction from them fails quietly: 31.7% of a 70B model's emitted values do not appear on the page it cites, and ratings from major providers agree at a correlation of only ~0.54.",
+    solution:
+      "Docling parses the PDF into sections and tables, an LLM (Llama-3.3-70B via NVIDIA NIM) extracts claims, and a five-stage deterministic repair layer — taxonomy normalisation, fiscal-year column repair, source-value verification, a rule-based gate, and a furniture filter — corrects them before each claim is grounded against its source page and stored with provenance in Supabase. NLI contradiction checks and a greenwashing taxonomy feed a document integrity report in a React dashboard.",
+    challenges: [
+      "Catching silent LLM errors — plausible values that never occur on the cited page.",
+      "Measuring recall honestly, against table cells enumerated from the parsed document instead of a gold set sampled from the system's own output.",
+      "Different disclosure formats need different repairs — statutory filings and narrative reports respond to different stages.",
+    ],
+    metrics: [
+      { label: "Precision composite", value: "96.1", hint: "up from 67.7 · statutory filing" },
+      { label: "Repair layer gain", value: "+24.6", hint: "points, zero LLM cost" },
+      { label: "Repair latency", value: "0.45 ms", hint: "per claim, no network" },
+      { label: "Claims extracted", value: "1,730", hint: "461 pages · 6 reports" },
+    ],
+    stack: ["Python", "FastAPI", "Docling", "Llama 3.3 70B", "Supabase", "pgvector", "React", "TypeScript", "DistilBERT NLI", "Docker"],
+    architecture: {
+      nodes: [
+        { id: "pdf", label: "ESG Report PDF", sub: "BRSR · IR", col: 0 },
+        { id: "parse", label: "Docling Parser", sub: "sections · tables", col: 1 },
+        { id: "llm", label: "LLM Extraction", sub: "Llama-3.3-70B · NIM", col: 2 },
+        { id: "repair", label: "Deterministic Repair", sub: "S1–S5 · 0.45 ms", col: 3 },
+        { id: "store", label: "Supabase", sub: "pgvector · provenance", col: 4 },
+        { id: "nli", label: "Contradictions", sub: "NLI", col: 5 },
+        { id: "report", label: "Integrity Report", sub: "dashboard", col: 5 },
+      ],
+      edges: [
+        ["pdf", "parse"], ["parse", "llm"], ["llm", "repair"], ["parse", "repair"],
+        ["repair", "store"], ["store", "nli"], ["store", "report"],
+      ],
+    },
+    highlights: [
+      "Deterministic repair layer: +24.6 points on a statutory filing at zero inference cost.",
+      "Central finding: the dominant repair depends on disclosure format — with non-overlapping 95% CIs.",
+      "Eight evaluation harnesses with bootstrap confidence intervals and a CI gate on ground truth.",
+      "Fully reproducible offline — seeded RNGs and models pinned by commit SHA.",
+    ],
+    links: { github: "https://github.com/iamnishaant/ESGenuine", demo: "https://esgenuine.onrender.com" },
     featured: true,
   },
   {
@@ -450,7 +501,7 @@ export const projects: Project[] = [
       "Transfer learning to cut dataset bias.",
       "Foundational to the cross-domain medical-imaging work.",
     ],
-    links: { github: "https://github.com/iamnishaant" },
+    links: {},
     featured: false,
   },
   {
@@ -498,7 +549,7 @@ export const projects: Project[] = [
       "SARS-CoV-2 & Omicron variant calling and annotation.",
       "Phylogenetic trees for large-scale viral surveillance.",
     ],
-    links: { github: "https://github.com/iamnishaant" },
+    links: {},
     featured: false,
   },
 ];
@@ -584,7 +635,7 @@ export const publications: Publication[] = [
     abstract:
       "DRISHTI is a Raspberry Pi 5-based wearable edge-AI and IoT system that fuses multimodal sensing — YOLOv8-nano vision, ultrasonic ranging, on-device face recognition, and image captioning — to deliver real-time, fully offline navigation assistance for visually-impaired users. The system reaches 98.42% detection precision at 25 ms latency and delivers guidance through multimodal voice and haptic feedback, eliminating cloud dependence.",
     // doi: "add-your-doi-here",
-    links: { pdf: "#", code: "https://github.com/iamnishaant/Meenakshi" },
+    links: { code: "https://github.com/iamnishaant/Meenakshi" },
   },
 ];
 
@@ -640,7 +691,6 @@ export const achievements: Achievement[] = [
   { title: "Published at ICTIS 2026", detail: "DRISHTI presented at the ICTIS 2026 Conference, Bangkok, Thailand", kind: "research" },
   { title: "Data Fellowship 2025", detail: "Selected for data-driven research and civic-tech innovation", kind: "research" },
   { title: "Chancellor's Scholarship", detail: "Awarded by Amrita Vishwa Vidyapeetham", kind: "scholarship" },
-  { title: "Mahatma Gandhi Scholarship", detail: "Embassy of India — for outstanding academic performance", kind: "scholarship" },
   { title: "5 Professional Certifications", detail: "DataCamp, AWS Academy, Udemy, and IIRS/ISRO", kind: "award" },
 ];
 
