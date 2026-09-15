@@ -57,11 +57,11 @@ export function Contact() {
   return (
     <section id="contact" className="section">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="gradient-border relative overflow-hidden rounded-3xl bg-[#07070a]/70 p-8 ring-glow sm:p-12">
+        <div className="gradient-border relative overflow-hidden rounded-3xl bg-[#07070a]/70 p-5 ring-glow sm:p-8 lg:p-12">
           <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(139,123,255,0.16),transparent_65%)] blur-2xl" />
           <div className="pointer-events-none absolute -bottom-24 -right-16 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(85,230,255,0.12),transparent_65%)] blur-2xl" />
 
-          <div className="relative grid gap-12 lg:grid-cols-[1fr_1.1fr]">
+          <div className="relative grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.1fr]">
             {/* left: protocol */}
             <div>
               <SectionHeading
@@ -74,7 +74,7 @@ export function Contact() {
                 Pick a channel, or transmit a message directly.
               </p>
 
-              <div className="mt-8 grid grid-cols-2 gap-3">
+              <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {CHANNELS.map((c) => (
                   <a
                     key={c.label}
@@ -101,7 +101,7 @@ export function Contact() {
             </div>
 
             {/* right: transmit form */}
-            <form onSubmit={submit} className="glass relative rounded-2xl p-6 sm:p-8">
+            <form onSubmit={submit} className="glass relative rounded-2xl p-5 sm:p-8">
               <div className="mb-6 flex items-center gap-2 font-mono text-xs text-ink-faint">
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
                 secure channel · open

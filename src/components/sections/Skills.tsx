@@ -55,6 +55,11 @@ function layout(): Placed[] {
 const NODES = layout();
 const BY_ID = Object.fromEntries(NODES.map((n) => [n.id, n]));
 
+// Quick-pick chips: the first eight everywhere; on small screens, where the
+// graph hides its labels, every other skill as well.
+const QUICK = skills.filter((s) => s.weight >= 2 && s.id !== "ai").slice(0, 8);
+const CHIPS = [...QUICK, ...skills.filter((s) => s.id !== "ai" && !QUICK.includes(s))];
+
 export function Skills() {
   const reduced = useReducedMotion();
   const [active, setActive] = useState<string | null>(null);
@@ -95,7 +100,7 @@ export function Skills() {
           description="Everything traces back to Artificial Intelligence. Hover a node to see its connections; click to see where it ships."
         />
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-[1.6fr_1fr]">
           {/* Graph */}
           <div
             ref={wrapRef}
@@ -179,7 +184,7 @@ export function Skills() {
                     <text
                       y={r + 15}
                       textAnchor="middle"
-                      className="pointer-events-none select-none"
+                      className="pointer-events-none select-none max-md:hidden"
                       fill={isCenter ? "#fff" : "rgba(237,237,242,0.75)"}
                       fontSize={isCenter ? 15 : 11}
                       fontWeight={isCenter ? 600 : 500}
@@ -192,18 +197,11 @@ export function Skills() {
             </svg>
 
             {/* legend */}
-            <div className="absolute bottom-4 left-4 flex flex-wrap gap-x-3 gap-y-1.5">
-              {Object.entries(skillGroups).map(([k, g]) => (
-                <span key={k} className="flex items-center gap-1.5 text-[10px] text-ink-faint">
-                  <span
-                    className="h-2 w-2 rounded-full"
-                    style={{ background: g.color }}
-                  />
-                  {g.label}
-                </span>
-              ))}
-            </div>
+            <Legend className="absolute bottom-4 left-4 hidden md:flex" />
           </div>
+
+          {/* Small screens hide the node labels, so the legend sits below the graph. */}
+          <Legend className="-mt-2 flex md:hidden" />
 
           {/* Detail panel */}
           <div className="lg:sticky lg:top-24 lg:self-start">
@@ -277,10 +275,7 @@ export function Skills() {
 
             {/* quick chips */}
             <div className="mt-4 flex flex-wrap gap-2">
-              {skills
-                .filter((s) => s.weight >= 2 && s.id !== "ai")
-                .slice(0, 8)
-                .map((s) => (
+              {CHIPS.map((s, i) => (
                   <button
                     key={s.id}
                     onMouseEnter={() => setActive(s.id)}
@@ -288,6 +283,7 @@ export function Skills() {
                     onClick={() => setSelected(s)}
                     className={cn(
                       "rounded-full border px-3 py-1 text-xs transition-colors",
+                      i >= 8 && "md:hidden",
                       selected?.id === s.id
                         ? "border-blue/50 text-ink"
                         : "border-line text-ink-dim hover:border-line-strong hover:text-ink"
@@ -301,5 +297,18 @@ export function Skills() {
         </div>
       </div>
     </section>
+  );
+}
+
+function Legend({ className }: { className: string }) {
+  return (
+    <div className={cn("flex-wrap gap-x-3 gap-y-1.5", className)}>
+      {Object.entries(skillGroups).map(([k, g]) => (
+        <span key={k} className="flex items-center gap-1.5 text-[10px] text-ink-faint">
+          <span className="h-2 w-2 rounded-full" style={{ background: g.color }} />
+          {g.label}
+        </span>
+      ))}
+    </div>
   );
 }

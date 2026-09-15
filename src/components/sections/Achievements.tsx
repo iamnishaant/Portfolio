@@ -23,7 +23,7 @@ export function Achievements() {
           eyebrow="Recognition"
           title="A wall of proof."
         />
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {achievements.map((a, i) => (
             <Reveal key={a.title} delay={i * 0.06}>
               <div className="group relative h-full overflow-hidden rounded-2xl border border-line bg-white/[0.02] p-6 transition-all duration-500 hover:border-line-strong hover:bg-white/[0.04]">

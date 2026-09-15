@@ -38,7 +38,7 @@ export function Projects() {
             More work
           </h3>
         </Reveal>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {rest.map((p, i) => (
             <MiniCard key={p.slug} project={p} index={i} />
           ))}
@@ -61,14 +61,14 @@ function FeatureBlock({
     <div className="mx-auto max-w-6xl px-6">
       <div
         className={cn(
-          "grid items-center gap-10 lg:grid-cols-2 lg:gap-16",
+          "grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16",
           flip && "lg:[&>*:first-child]:order-2"
         )}
       >
         {/* Copy */}
         <div>
           <Reveal>
-            <div className="mb-4 flex items-center gap-3">
+            <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2">
               <span
                 className="rounded-full border px-3 py-1 text-[11px] font-medium"
                 style={{ borderColor: `${p.accent}55`, color: p.accent }}
@@ -81,7 +81,7 @@ function FeatureBlock({
             </div>
           </Reveal>
           <Reveal delay={0.05}>
-            <h3 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+            <h3 className="wrap-break-word font-display text-4xl font-semibold tracking-tight sm:text-5xl">
               {p.name}
             </h3>
           </Reveal>
@@ -97,7 +97,7 @@ function FeatureBlock({
               {p.metrics.map((m) => (
                 <div key={m.label} className="bg-[#08080b] p-4">
                   <div
-                    className="font-display text-2xl font-semibold"
+                    className="wrap-break-word font-display text-xl font-semibold leading-tight sm:text-2xl"
                     style={{ color: p.accent }}
                   >
                     {m.value}

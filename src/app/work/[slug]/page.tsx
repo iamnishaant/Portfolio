@@ -71,10 +71,10 @@ export default async function ProjectPage({
             </span>
           </div>
 
-          <h1 className="mt-5 font-display text-5xl font-semibold tracking-tight sm:text-7xl">
+          <h1 className="mt-5 wrap-break-word font-display text-4xl font-semibold tracking-tight hyphens-auto sm:text-6xl lg:text-7xl">
             {project.name}
           </h1>
-          <p className="mt-5 max-w-2xl text-xl leading-relaxed text-ink-dim">
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-dim sm:text-xl">
             {project.tagline}
           </p>
 
@@ -100,9 +100,9 @@ export default async function ProjectPage({
           {/* metrics */}
           <div className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-4">
             {project.metrics.map((m) => (
-              <div key={m.label} className="bg-[#08080b] p-5">
+              <div key={m.label} className="bg-[#08080b] p-4 sm:p-5">
                 <div
-                  className="font-display text-3xl font-semibold"
+                  className="wrap-break-word font-display text-xl font-semibold leading-tight hyphens-auto sm:text-3xl"
                   style={{ color: project.accent }}
                 >
                   <MetricValue value={m.value} />
@@ -127,7 +127,7 @@ export default async function ProjectPage({
           </p>
         </Reveal>
 
-        <div className="mt-16 grid gap-10 md:grid-cols-2">
+        <div className="mt-16 grid grid-cols-1 gap-10 md:grid-cols-2">
           <Block title="The problem" body={project.problem} />
           <Block title="The solution" body={project.solution} accent={project.accent} />
         </div>
@@ -147,7 +147,7 @@ export default async function ProjectPage({
         </Reveal>
 
         {/* Challenges + highlights */}
-        <div className="mt-20 grid gap-12 md:grid-cols-2">
+        <div className="mt-20 grid grid-cols-1 gap-12 md:grid-cols-2">
           <Reveal>
             <div>
               <SectionLabel accent={project.accent}>Challenges solved</SectionLabel>
@@ -206,17 +206,17 @@ export default async function ProjectPage({
         href={`/work/${next.slug}`}
         className="group block border-t border-line"
       >
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-14">
-          <div>
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-14">
+          <div className="min-w-0">
             <div className="text-xs uppercase tracking-wider text-ink-faint">
               Next project
             </div>
-            <div className="mt-2 font-display text-3xl font-semibold transition-colors group-hover:text-white sm:text-4xl">
+            <div className="mt-2 wrap-break-word font-display text-2xl font-semibold transition-colors group-hover:text-white sm:text-4xl">
               {next.name}
             </div>
             <div className="mt-1 text-sm text-ink-faint">{next.category}</div>
           </div>
-          <ArrowRight className="h-8 w-8 text-ink-faint transition-all group-hover:translate-x-2 group-hover:text-ink" />
+          <ArrowRight className="h-8 w-8 shrink-0 text-ink-faint transition-all group-hover:translate-x-2 group-hover:text-ink" />
         </div>
       </Link>
     </article>

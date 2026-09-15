@@ -16,7 +16,7 @@ export function Experience() {
           description="A CSE (AI) degree in progress, backed by industry certifications from AWS, DataCamp, ISRO/IIRS and more."
         />
 
-        <div className="mt-16 grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-12">
+        <div className="mt-16 grid grid-cols-1 gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-12">
           {/* Education */}
           <div>
             <div className="mb-6 flex items-center gap-2 text-sm font-medium text-ink-dim">

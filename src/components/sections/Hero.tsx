@@ -49,7 +49,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden noise"
+      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden pb-24 pt-28 noise sm:pt-32"
     >
       {/* Neural network */}
       <div className="absolute inset-0 -z-10 opacity-70">
@@ -96,10 +96,10 @@ export function Hero() {
         {/* Rotating role + description */}
         <Reveal delay={0.4}>
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="flex items-center gap-2 font-mono text-sm text-ink-dim">
-              <span className="text-blue">{profile.name}</span>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-sm text-ink-dim">
+              <span className="whitespace-nowrap text-blue">{profile.name}</span>
               <span className="text-ink-faint">—</span>
-              <span className="relative inline-block h-5 w-[220px] overflow-hidden">
+              <span className="relative inline-block h-5 w-[220px] max-w-full overflow-hidden">
                 {profile.roles.map((r, i) => (
                   <motion.span
                     key={r}
