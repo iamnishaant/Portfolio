@@ -53,15 +53,21 @@ export function RevealText({
 
   if (reduced) return <span className={className}>{text}</span>;
 
+  // The in-view check sits on the whole title: each word starts translated
+  // outside its overflow-hidden wrapper, so observing the words themselves
+  // never registers them as visible and the title stayed hidden.
   return (
-    <span className={className}>
+    <motion.span
+      className={className}
+      initial="hidden"
+      whileInView="shown"
+      viewport={{ once: true }}
+    >
       {words.map((w, i) => (
         <span key={i} className="inline-block overflow-hidden align-bottom">
           <motion.span
             className="inline-block"
-            initial={{ y: "110%" }}
-            whileInView={{ y: 0 }}
-            viewport={{ once: true }}
+            variants={{ hidden: { y: "110%" }, shown: { y: 0 } }}
             transition={{
               duration: 0.85,
               delay: delay + i * stagger,
@@ -73,6 +79,6 @@ export function RevealText({
           </motion.span>
         </span>
       ))}
-    </span>
+    </motion.span>
   );
 }
