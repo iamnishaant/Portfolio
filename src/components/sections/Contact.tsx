@@ -5,29 +5,54 @@ import { useState } from "react";
 import { Mail, Calendar, Check, Loader2, ArrowUpRight } from "lucide-react";
 import { Github, Linkedin } from "@/components/ui/BrandIcons";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Reveal } from "@/components/ui/Reveal";
 import { profile } from "@/lib/data";
 
 const CHANNELS = [
   { icon: <Mail className="h-5 w-5" />, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
   { icon: <Linkedin className="h-5 w-5" />, label: "LinkedIn", value: "in/nishant-shah", href: profile.socials.linkedin },
-  { icon: <Github className="h-5 w-5" />, label: "GitHub", value: "@nishant-shah", href: profile.socials.github },
+  { icon: <Github className="h-5 w-5" />, label: "GitHub", value: "@iamnishaant", href: profile.socials.github },
   { icon: <Calendar className="h-5 w-5" />, label: "Schedule", value: "Book a call", href: `mailto:${profile.email}?subject=Let's talk` },
 ];
 
-type Status = "idle" | "sending" | "sent";
+type Status = "idle" | "sending" | "sent" | "error";
+
+const SEND_FAILED = "Couldn't send right now.";
 
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", message: "", website: "" });
 
-  function submit(e: React.FormEvent) {
+  const busy = status === "sending" || status === "sent";
+
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (status !== "idle") return;
+    if (busy) return;
     setStatus("sending");
-    // Simulated transmit — wire to a real endpoint later.
-    setTimeout(() => setStatus("sent"), 1400);
+    setError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) {
+        setStatus("sent");
+        return;
+      }
+      const data = await res.json().catch(() => ({}));
+      // 400s carry a message written for the visitor; anything else is on our side.
+      setError(res.status === 400 && typeof data.error === "string" ? data.error : SEND_FAILED);
+    } catch {
+      setError(SEND_FAILED);
+    }
+    setStatus("error");
   }
+
+  // Fallback keeps whatever the visitor already typed.
+  const mailtoFallback = `mailto:${profile.email}?subject=${encodeURIComponent(
+    `Portfolio message from ${form.name || "a visitor"}`,
+  )}&body=${encodeURIComponent(form.message)}`;
 
   return (
     <section id="contact" className="section">
@@ -76,50 +101,72 @@ export function Contact() {
             </div>
 
             {/* right: transmit form */}
-            <form onSubmit={submit} className="glass rounded-2xl p-6 sm:p-8">
+            <form onSubmit={submit} className="glass relative rounded-2xl p-6 sm:p-8">
               <div className="mb-6 flex items-center gap-2 font-mono text-xs text-ink-faint">
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
                 secure channel · open
               </div>
               <div className="space-y-4">
                 <Field
+                  id="contact-name"
+                  name="name"
+                  autoComplete="name"
                   label="Name"
                   value={form.name}
                   onChange={(v) => setForm({ ...form, name: v })}
                   placeholder="Ada Lovelace"
-                  disabled={status !== "idle"}
+                  maxLength={100}
+                  disabled={busy}
                 />
                 <Field
+                  id="contact-email"
+                  name="email"
+                  autoComplete="email"
                   label="Email"
                   type="email"
                   value={form.email}
                   onChange={(v) => setForm({ ...form, email: v })}
                   placeholder="you@company.com"
-                  disabled={status !== "idle"}
+                  maxLength={200}
+                  disabled={busy}
                 />
                 <div>
-                  <label className="mb-1.5 block text-xs text-ink-faint">Message</label>
+                  <label htmlFor="contact-message" className="mb-1.5 block text-xs text-ink-faint">Message</label>
                   <textarea
+                    id="contact-message"
+                    name="message"
                     required
                     rows={4}
+                    maxLength={5000}
                     value={form.message}
-                    disabled={status !== "idle"}
+                    disabled={busy}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Tell me about the role or the problem…"
                     className="w-full resize-none rounded-xl border border-line bg-white/[0.02] px-4 py-3 text-sm outline-none transition-colors focus:border-blue/50 disabled:opacity-60"
                   />
                 </div>
+                {/* honeypot — hidden from people, filled in by bots */}
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  value={form.website}
+                  onChange={(e) => setForm({ ...form, website: e.target.value })}
+                  className="pointer-events-none absolute -left-[9999px] h-px w-px opacity-0"
+                />
               </div>
 
               <button
                 type="submit"
-                disabled={status !== "idle"}
+                disabled={busy}
                 className="group relative mt-6 flex h-12 w-full items-center justify-center overflow-hidden rounded-xl bg-white font-medium text-black transition-transform active:scale-[0.99] disabled:cursor-default"
               >
                 <AnimatePresence mode="wait">
-                  {status === "idle" && (
+                  {(status === "idle" || status === "error") && (
                     <motion.span key="idle" className="flex items-center gap-2" exit={{ opacity: 0, y: -10 }}>
-                      Transmit message
+                      {status === "error" ? "Try again" : "Transmit message"}
                       <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </motion.span>
                   )}
@@ -137,9 +184,18 @@ export function Contact() {
                   )}
                 </AnimatePresence>
               </button>
-              <p className="mt-3 text-center text-[10px] text-ink-faint">
-                Demo form · connect a handler or use the channels on the left.
-              </p>
+              {status === "error" ? (
+                <p role="alert" className="mt-3 text-center text-xs text-rose-400">
+                  {error}{" "}
+                  <a href={mailtoFallback} className="underline underline-offset-2 hover:text-rose-300">
+                    Email me directly
+                  </a>
+                </p>
+              ) : (
+                <p className="mt-3 text-center text-[10px] text-ink-faint">
+                  Goes straight to my inbox · or use the channels on the left.
+                </p>
+              )}
             </form>
           </div>
         </div>
@@ -149,27 +205,39 @@ export function Contact() {
 }
 
 function Field({
+  id,
+  name,
+  autoComplete,
   label,
   value,
   onChange,
   placeholder,
   type = "text",
+  maxLength,
   disabled,
 }: {
+  id: string;
+  name: string;
+  autoComplete?: string;
   label: string;
   value: string;
   onChange: (v: string) => void;
   placeholder: string;
   type?: string;
+  maxLength?: number;
   disabled?: boolean;
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs text-ink-faint">{label}</label>
+      <label htmlFor={id} className="mb-1.5 block text-xs text-ink-faint">{label}</label>
       <input
+        id={id}
+        name={name}
+        autoComplete={autoComplete}
         required
         type={type}
         value={value}
+        maxLength={maxLength}
         disabled={disabled}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}

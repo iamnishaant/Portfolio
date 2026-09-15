@@ -56,8 +56,9 @@ read from here.
 your model (e.g. Claude via the Anthropic SDK). The client already expects the
 `{ answer, citations, suggestions }` shape, so no UI changes are needed.
 
-**5. Contact form.** `Contact.tsx` simulates a send. Wire the `submit` handler
-to an API route / form service to make it live.
+**5. Contact form.** Messages are sent from your Gmail account by
+`app/api/contact/route.ts`. Copy `.env.example` to `.env.local` and add a
+Google App Password (`GMAIL_APP_PASSWORD`) to make it live.
 
 ## Keyboard shortcuts
 
