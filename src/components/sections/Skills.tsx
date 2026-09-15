@@ -19,6 +19,11 @@ interface Placed extends SkillNode {
 
 const V = 440; // viewBox half-extent
 
+// Math.cos/sin can differ in the last digit between Node and the browser,
+// which made the server-rendered SVG coordinates fail hydration. Two decimals
+// is far below a pixel at this viewBox and comes out identical on both sides.
+const round2 = (v: number) => Math.round(v * 100) / 100;
+
 function layout(): Placed[] {
   const center = skills.find((s) => s.id === "ai")!;
   const others = skills.filter((s) => s.id !== "ai");
@@ -39,20 +44,19 @@ function layout(): Placed[] {
     const jitter = ring === 0 ? 0 : 0;
     placed.push({
       ...s,
-      x: Math.cos(angle) * (radius + jitter),
-      y: Math.sin(angle) * (radius + jitter),
+      x: round2(Math.cos(angle) * (radius + jitter)),
+      y: round2(Math.sin(angle) * (radius + jitter)),
     });
   });
   return placed;
 }
 
+// The graph is static data, so it is laid out once for the module.
+const NODES = layout();
+const BY_ID = Object.fromEntries(NODES.map((n) => [n.id, n]));
+
 export function Skills() {
   const reduced = useReducedMotion();
-  const nodes = useMemo(layout, []);
-  const byId = useMemo(
-    () => Object.fromEntries(nodes.map((n) => [n.id, n])),
-    [nodes]
-  );
   const [active, setActive] = useState<string | null>(null);
   const [selected, setSelected] = useState<SkillNode | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -111,8 +115,8 @@ export function Skills() {
               {/* edges */}
               <g>
                 {skillLinks.map(([a, b], i) => {
-                  const na = byId[a];
-                  const nb = byId[b];
+                  const na = BY_ID[a];
+                  const nb = BY_ID[b];
                   if (!na || !nb) return null;
                   const isOn =
                     focus && (a === focus || b === focus);
@@ -132,7 +136,7 @@ export function Skills() {
               </g>
 
               {/* nodes */}
-              {nodes.map((node) => {
+              {NODES.map((node) => {
                 const isCenter = node.id === "ai";
                 const dim =
                   focus && focus !== node.id && !connected.has(node.id);
